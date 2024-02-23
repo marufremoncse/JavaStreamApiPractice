@@ -121,6 +121,12 @@ public class MockData {
 		// Collectors.joining()
 		joinStringWithStream();
 
+		// Lecture 12
+		understandingCollect(people);
+
+		// Lecture 13
+		intermediateAndTerminalOPerations(cars);
+
 	}
 
 	// Lecture 1
@@ -381,8 +387,34 @@ public class MockData {
 		List<String> stringList = new ArrayList<String>(
 				Arrays.asList("one", "two", "three", "four", "five", "six", "seven"));
 
-		String joinWithStream = stringList.stream().collect(Collectors.joining(",", "Hello", "World"));
+		String joinWithStream = stringList.stream().map(String::toUpperCase)
+				.collect(Collectors.joining(",", "Hello", "World"));
 		System.out.println("joinWithStream: " + joinWithStream);
+	}
+
+	// Lecture 12
+	private static void understandingCollect(List<Person> people) {
+		people.stream().map(Person::getEmail).collect(Collectors.toList()).forEach(System.out::println);
+
+		// alternative
+		people.stream().map(Person::getEmail).collect(() -> new ArrayList<String>(),
+				(list, element) -> list.add(element), (list1, list2) -> list1.addAll(list2))
+				.forEach(System.out::println);
+
+	}
+
+	// Lecture 13
+	private static void intermediateAndTerminalOPerations(List<Car> cars) {
+		System.out.println(cars.stream().filter(car -> {
+			System.out.println("Filtering Cars: " + car);
+			return car.getPrice() < 20000;
+		}).map(car -> {
+			System.out.println("Mapping Cars: " + car);
+			return car.getPrice();
+		}).map(price -> {
+			System.out.println("Mapping price: " + price);
+			return price * 1.4;
+		}).collect(Collectors.toList()));
 	}
 
 }
